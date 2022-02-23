@@ -27,9 +27,9 @@ contract RWD {
     {
         //require owner's balance is greater than transfer value
         require(balanceOf[msg.sender] >= _value);
-        //transfer funds, subtract balance from sender
+        //transfer funds, subtract balance from sender account
         balanceOf[msg.sender] -= _value;
-        //add balance to receiver
+        //add balance to receiver account
         balanceOf[_to] += _value;
         emit Transfer(msg.sender, _to, _value);
         return true;
@@ -52,9 +52,9 @@ contract RWD {
         require(_value <= balanceOf[_from]);
         require(_value <= allowance[_from][msg.sender]);
 
-        // add the balance
+        // add the balance to receiver account
         balanceOf[_to] += _value;
-        //subtract balance from sender
+        //subtract balance from sender account
         balanceOf[_from] -= _value;
         allowance[msg.sender][_from] -= _value;
         emit Transfer(_from, _to, _value);
