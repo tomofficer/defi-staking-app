@@ -6,21 +6,50 @@ require('chai')
   .use(require('chai-as-promised'))
   .should();
 
-contract('DecentralBank', (accounts) => {
+contract('DecentralBank', ([owner, customer]) => {
+  let tether, rwd;
+
+  function tokens(number) {
+    return web3.utils.toWei(number, 'ether');
+  }
+
+  before(async () => {
+    //load contracts
+    tether = await Tether.new();
+    rwd = await RWD.new();
+    decentralBank = await DecentralBank.new(rwd.address, tether.address);
+
+    //transfer all tokens to DecentralBank (1 mil)
+    await rwd.transfer(decentralBank.address, tokens('1000000'));
+
+    //transfer 100 mock tether to investor
+    await tether.transfer(customer, tokens('100', { from: owner }));
+  });
+
   //all testing code goes here
   describe('Mock Tether Deployment', async () => {
     it('matches name successfully', async () => {
-      let tether = await Tether.new();
       const name = await tether.name();
       assert.equal(name, 'Mock Tether Token');
     });
   });
 
-  describe('Reward Token', async () => {
+  describe('Reward Token Deployment', async () => {
     it('matches name successfully', async () => {
-      let reward = await RWD.new();
-      const name = await reward.name();
+      const name = await rwd.name();
       assert.equal(name, 'Reward Token');
+    });
+  });
+
+  describe('Decentral Bank Deployment', async () => {
+    it('matches name successfully', async () => {
+      const name = await decentralBank.name();
+      assert.equal(name, 'Decentral Bank');
+    });
+
+    it('contract has tokens', async () => {
+      let balance = await rwd.balanceOf(decentralBank.address);
+      assert.equal(balance, tokens('1000000'));
     });
   });
 });
