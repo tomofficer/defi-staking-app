@@ -33,3 +33,6 @@ class Navbar extends Component {
 }
 
 export default Navbar;
+
+//todo customize top navbar
+//todo sync metamask

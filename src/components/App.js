@@ -15,7 +15,7 @@ class App extends Component {
       <div>
         <Navbar account={this.state.account} />
         <div className='text-center'>
-          <h1></h1>
+          <h1>DEFI STAKING APP</h1>
         </div>
       </div>
     );
